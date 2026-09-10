@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Heart Disease Prediction</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 38px;
+            color: #1d4ed8;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-bottom: 25px;
+            color: #334155;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 30px;
+            padding: 15px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px;
+            background: #f1f5f9;
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .result p {
+            margin: 12px;
+            font-size: 18px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .disclaimer {
+            text-align: center;
+            margin-top: 8px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        @media (max-width: 700px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 95%;
+                margin: 20px auto;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>❤️ Heart Disease Prediction</h1>
+
+        <p>
+            Machine Learning Based Prediction System
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Patient Information</h2>
+
+
+        <form id="predictionForm">
+
+            <div class="grid">
+
+
+                <!-- Age -->
+
+                <div class="form-group">
+
+                    <label>Age</label>
+
+                    <input
+                        type="number"
+                        id="age"
+                        placeholder="Enter age"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Sex -->
+
+                <div class="form-group">
+
+                    <label>Sex</label>
+
+                    <select id="sex" required>
+
+                        <option value="">Select</option>
+
+                        <option value="Male">
+                            Male
+                        </option>
+
+                        <option value="Female">
+                            Female
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Dataset -->
+
+                <div class="form-group">
+
+                    <label>Dataset</label>
+
+                    <select id="dataset" required>
+
+                        <option value="">Select</option>
+
+                        <option value="Cleveland">
+                            Cleveland
+                        </option>
+
+                        <option value="Hungary">
+                            Hungary
+                        </option>
+
+                        <option value="Switzerland">
+                            Switzerland
+                        </option>
+
+                        <option value="VA Long Beach">
+                            VA Long Beach
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Chest Pain -->
+
+                <div class="form-group">
+
+                    <label>Chest Pain Type</label>
+
+                    <select id="cp" required>
+
+                        <option value="">Select</option>
+
+                        <option value="typical angina">
+                            Typical Angina
+                        </option>
+
+                        <option value="atypical angina">
+                            Atypical Angina
+                        </option>
+
+                        <option value="non-anginal">
+                            Non-anginal
+                        </option>
+
+                        <option value="asymptomatic">
+                            Asymptomatic
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Blood Pressure -->
+
+                <div class="form-group">
+
+                    <label>Resting Blood Pressure</label>
+
+                    <input
+                        type="number"
+                        id="trestbps"
+                        placeholder="e.g. 120"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Cholesterol -->
+
+                <div class="form-group">
+
+                    <label>Cholesterol</label>
+
+                    <input
+                        type="number"
+                        id="chol"
+                        placeholder="e.g. 200"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- FBS -->
+
+                <div class="form-group">
+
+                    <label>Fasting Blood Sugar</label>
+
+                    <select id="fbs" required>
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="FALSE">
+                            No
+                        </option>
+
+                        <option value="TRUE">
+                            Yes
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ECG -->
+
+                <div class="form-group">
+
+                    <label>Resting ECG</label>
+
+                    <select id="restecg" required>
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="normal">
+                            Normal
+                        </option>
+
+                        <option value="st-t abnormality">
+                            ST-T Abnormality
+                        </option>
+
+                        <option value="lv hypertrophy">
+                            LV Hypertrophy
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Maximum Heart Rate -->
+
+                <div class="form-group">
+
+                    <label>Maximum Heart Rate</label>
+
+                    <input
+                        type="number"
+                        id="thalch"
+                        placeholder="e.g. 150"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Exercise Angina -->
+
+                <div class="form-group">
+
+                    <label>Exercise Angina</label>
+
+                    <select id="exang" required>
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="FALSE">
+                            No
+                        </option>
+
+                        <option value="TRUE">
+                            Yes
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Oldpeak -->
+
+                <div class="form-group">
+
+                    <label>Oldpeak</label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        id="oldpeak"
+                        placeholder="e.g. 1.2"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Slope -->
+
+                <div class="form-group">
+
+                    <label>ST Slope</label>
+
+                    <select id="slope" required>
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="upsloping">
+                            Upsloping
+                        </option>
+
+                        <option value="flat">
+                            Flat
+                        </option>
+
+                        <option value="downsloping">
+                            Downsloping
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- CA -->
+
+                <div class="form-group">
+
+                    <label>Major Vessels (CA)</label>
+
+                    <input
+                        type="number"
+                        id="ca"
+                        min="0"
+                        max="3"
+                        step="1"
+                        placeholder="0 - 3"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Thal -->
+
+                <div class="form-group">
+
+                    <label>Thalassemia</label>
+
+                    <select id="thal" required>
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="normal">
+                            Normal
+                        </option>
+
+                        <option value="fixed defect">
+                            Fixed Defect
+                        </option>
+
+                        <option value="reversable defect">
+                            Reversible Defect
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="predictButton"
+            >
+                Predict Heart Disease
+            </button>
+
+        </form>
+
+
+        <div
+            id="loading"
+            class="loading hidden"
+        >
+            Making prediction...
+        </div>
+
+
+        <div
+            id="result"
+            class="result hidden"
+        >
+
+            <h2>Prediction Result</h2>
+
+            <p>
+                Result:
+                <strong id="prediction"></strong>
+            </p>
+
+            <p>
+                Disease Probability:
+                <strong id="probability"></strong>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        UCI Heart Disease Dataset •
+        Scikit-Learn •
+        FastAPI
+
+    </div>
+
+
+    <div class="disclaimer">
+
+        This application is for educational purposes only
+        and is not a medical diagnosis.
+
+    </div>
+
+</div>
+
+
+<script>
+
+const form =
+    document.getElementById("predictionForm");
+
+const loading =
+    document.getElementById("loading");
+
+const result =
+    document.getElementById("result");
+
+const prediction =
+    document.getElementById("prediction");
+
+const probability =
+    document.getElementById("probability");
+
+const predictButton =
+    document.getElementById("predictButton");
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const patientData = {
+
+            age: Number(
+                document.getElementById("age").value
+            ),
+
+            sex:
+                document.getElementById("sex").value,
+
+            dataset:
+                document.getElementById("dataset").value,
+
+            cp:
+                document.getElementById("cp").value,
+
+            trestbps: Number(
+                document.getElementById("trestbps").value
+            ),
+
+            chol: Number(
+                document.getElementById("chol").value
+            ),
+
+            fbs:
+                document.getElementById("fbs").value,
+
+            restecg:
+                document.getElementById("restecg").value,
+
+            thalch: Number(
+                document.getElementById("thalch").value
+            ),
+
+            exang:
+                document.getElementById("exang").value,
+
+            oldpeak: Number(
+                document.getElementById("oldpeak").value
+            ),
+
+            slope:
+                document.getElementById("slope").value,
+
+            ca: Number(
+                document.getElementById("ca").value
+            ),
+
+            thal:
+                document.getElementById("thal").value
+
+        };
+
+
+        console.log(
+            "Sending data:",
+            patientData
+        );
+
+
+        loading.classList.remove("hidden");
+
+        result.classList.add("hidden");
+
+        predictButton.disabled = true;
+
+        predictButton.textContent =
+            "Predicting...";
+
+
+        try {
+
+            const response = await fetch(
+                "/predict",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(patientData)
+                }
+            );
+
+
+            if (!response.ok) {
+
+                const error =
+                    await response.json();
+
+                throw new Error(
+                    error.detail ||
+                    "Prediction failed"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "API Response:",
+                data
+            );
+
+
+            prediction.textContent =
+                data.result;
+
+            probability.textContent =
+                data.probability + "%";
+
+
+            result.classList.remove(
+                "hidden"
+            );
+
+        }
+
+
+        catch(error) {
+
+            console.error(error);
+
+            alert(
+                "Something went wrong: " +
+                error.message
+            );
+
+        }
+
+
+        finally {
+
+            loading.classList.add(
+                "hidden"
+            );
+
+            predictButton.disabled =
+                false;
+
+            predictButton.textContent =
+                "Predict Heart Disease";
+
+        }
+
+    }
+
+);
+
+</script>
+
+</body>
+
+</html>
